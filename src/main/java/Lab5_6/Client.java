@@ -19,6 +19,7 @@ public class Client {
 
     public static void send(String msg) {
         try {
+            //System.out.println("Message added");
             sendSem.acquire();
             outMessages.add(msg);
             sendSem.release();
@@ -52,7 +53,7 @@ public class Client {
         {
             System.out.println("Podaj wiadomosc: ");
             String message;
-            message=scanner.nextLine();
+            message = scanner.nextLine();
             send(nick + "|" + message);
         }
     }

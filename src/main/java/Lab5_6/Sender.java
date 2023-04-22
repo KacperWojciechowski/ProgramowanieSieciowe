@@ -25,19 +25,22 @@ public class Sender extends Thread {
     {
         while(true)
         {
-            if(!msgList.isEmpty())
-            {
-                try {
-                    sendSem.acquire();
+            //System.out.println("Sender");
+            try {
+                sendSem.acquire();
+                if(!msgList.isEmpty())
+                {
+                    //System.out.println("Sender 2");
                     String message = msgList.get(0);
                     msgList.remove(0);
-                    sendSem.release();
                     DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), group, 6789);
+                    socket.setTimeToLive(10);
                     socket.send(packet);
-                } catch (InterruptedException | IOException e) {
-                    e.printStackTrace();
                 }
+            } catch (InterruptedException | IOException e) {
+                throw new RuntimeException(e);
             }
+            sendSem.release();
         }
     }
 }
