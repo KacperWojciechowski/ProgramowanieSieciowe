@@ -72,6 +72,7 @@ public class Client {
         else if (command.equalsIgnoreCase("Refresh") && sender.equalsIgnoreCase(nick))
         {
             gui.process(sender, msg, Target.ONLINELIST, Operation.CLEAR);
+            gui.process(nick, msg, Target.ONLINELIST, Operation.APPEND);
         }
         else if (command.equalsIgnoreCase("Refresh"))
         {
