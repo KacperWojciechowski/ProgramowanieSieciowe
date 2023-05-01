@@ -20,15 +20,11 @@ public class GUI {
         mainFrame = new MainFrame(nickname);
         mainFrame.start();
         refresher = new Refresher(nickname);
-        //refresher.start();
+        refresher.start();
         return nickname;
     }
 
     public void keepAlive() {
         while(true);
-    }
-
-    private void createRefresher() {
-        refresher = new Refresher(nickname);
     }
 }

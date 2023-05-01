@@ -42,13 +42,15 @@ public class Client {
                 inMessages.remove(0);
                 recvSem.release();
                 System.out.println(message);
-                Pattern pattern = Pattern.compile("\\[(?<nick>[A-Za-z0-9]+)\\]:?{(?<command>[a-z]+)}?\\((?<message>[A-Za-z0-9_ ]+)\\)");
+                Pattern pattern = Pattern.compile("\\[(?<nick>[A-Za-z0-9]+)\\]:?\\{(?<command>[A-Za-z]+)\\}?\\((?<message>[A-Za-z0-9_ ]*)\\)");
                 Matcher matcher = pattern.matcher(message);
+                System.out.println("Inside receiver callback");
                 if (matcher.find())
                 {
                     String nick = matcher.group("nick");
                     String command = matcher.group("command");
                     String msg = matcher.group("message");
+                    System.out.println(nick + " " + command + " " + msg);
                     process(nick, command, msg);
                 }
             } catch (InterruptedException e) {
@@ -77,6 +79,7 @@ public class Client {
         }
         else
         {
+            System.out.println("Nick: " + nick + " Message: " + msg);
             gui.process(nick, msg, Target.CHAT, Operation.APPEND);
         }
     }

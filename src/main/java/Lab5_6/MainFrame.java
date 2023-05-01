@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
     private JScrollPane chatScroll = new JScrollPane(chat);
     private GridLayout chatLayout = new GridLayout();
     private JPanel chatPanel = new JPanel();
-    private JTextField input = new JTextField(100);
+    private JTextField input = new JTextField(50);
     private String nick;
     public MainFrame(String nick)
     {
@@ -50,12 +50,15 @@ public class MainFrame extends JFrame {
     }
 
     private void addInputPanel(GridBagConstraints gbc) {
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
         panel.add(inputPanel, gbc);
     }
 
     private void addOnlinePanel(GridBagConstraints gbc) {
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 1;
         gbc.gridy = 0;
         panel.add(onlinePanel, gbc);
@@ -111,12 +114,12 @@ public class MainFrame extends JFrame {
         sendButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (sendButton.isEnabled())
-                {
-                    String msg = input.getText();
-                    Client.send("[" + nick + "]" + "{Message}(" + msg + ")");
-                }
-                super.mouseClicked(e);
+            if (sendButton.isEnabled())
+            {
+                String msg = input.getText();
+                Client.send("[" + nick + "]" + "{Message}(" + msg + ")");
+            }
+            super.mouseClicked(e);
             }
         });
 
@@ -165,7 +168,8 @@ public class MainFrame extends JFrame {
 
     void updateChat(String nick, String message)
     {
-        chat.append("[" + nick + "] " + message);
+        System.out.println("Append to chat: [" + nick + "] " + message);
+        chat.append("[" + nick + "] " + message + "\n");
     }
 
     public void start() {
