@@ -160,10 +160,7 @@ public class MainFrame extends JFrame {
         }
         else
         {
-            if (!onlineArea.getText().contains(nick))
-            {
-                onlineArea.append(nick + "\n");
-            }
+            onlineArea.append(nick + "\n");
         }
     }
 

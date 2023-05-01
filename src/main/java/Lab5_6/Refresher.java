@@ -14,7 +14,7 @@ public class Refresher extends Thread{
         while(true) {
             Client.send("[" + nick + "]{Refresh}()");
             try {
-                Thread.sleep(250);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
