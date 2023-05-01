@@ -79,8 +79,8 @@ public class Client {
         }
         else
         {
-            System.out.println("Nick: " + nick + " Message: " + msg);
-            gui.process(nick, msg, Target.CHAT, Operation.APPEND);
+            System.out.println("Nick: " + sender + " Message: " + msg);
+            gui.process(sender, msg, Target.CHAT, Operation.APPEND);
         }
     }
 }

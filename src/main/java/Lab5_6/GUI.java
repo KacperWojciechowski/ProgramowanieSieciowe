@@ -16,7 +16,6 @@ public class GUI {
         Popup popup = new Popup();
         nickname = popup.askForNickname();
         System.out.println(nickname);
-        popup = null;
         mainFrame = new MainFrame(nickname);
         mainFrame.start();
         refresher = new Refresher(nickname);
