@@ -77,7 +77,7 @@ public class Client {
         {
             Client.send("[" + nick + "]{Alive}(" + sender + ")");
         }
-        else
+        else if (command.equalsIgnoreCase("Message"))
         {
             System.out.println("Nick: " + sender + " Message: " + msg);
             gui.process(sender, msg, Target.CHAT, Operation.APPEND);
