@@ -3,12 +3,12 @@ package Lab5_6;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.net.UnknownHostException;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Client {
     private static final List<String> inMessages = new ArrayList<>();
@@ -16,6 +16,8 @@ public class Client {
 
     private static final Semaphore recvSem = new Semaphore(1);
     private static final Semaphore sendSem = new Semaphore(1);
+    private static GUI gui;
+    private static String nick;
 
     public static void send(String msg) {
         try {
@@ -32,12 +34,23 @@ public class Client {
         InetAddress group = InetAddress.getByName("228.5.6.7");
         MulticastSocket socket = new MulticastSocket(6789);
         socket.joinGroup(group);
+        gui = new GUI();
         Receiver receiver = new Receiver(socket, inMessages, recvSem, () -> {
             try {
                 recvSem.acquire();
-                System.out.println(inMessages.get(0));
+                String message = inMessages.get(0);
                 inMessages.remove(0);
                 recvSem.release();
+                System.out.println(message);
+                Pattern pattern = Pattern.compile("\\[(?<nick>[A-Za-z0-9]+)\\]:?{(?<command>[a-z]+)}?\\((?<message>[A-Za-z0-9_ ]+)\\)");
+                Matcher matcher = pattern.matcher(message);
+                if (matcher.find())
+                {
+                    String nick = matcher.group("nick");
+                    String command = matcher.group("command");
+                    String msg = matcher.group("message");
+                    process(nick, command, msg);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -45,16 +58,26 @@ public class Client {
         Sender sender = new Sender(socket, outMessages, sendSem, group);
         receiver.start();
         sender.start();
+        nick = gui.start();
+        gui.keepAlive();
+    }
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Podaj swoj nick: ");
-        String nick = scanner.nextLine();
-        while(true)
+    private static void process(String sender, String command, String msg) {
+        if (command.equalsIgnoreCase("Alive") && msg.equalsIgnoreCase(nick))
         {
-            System.out.println("Podaj wiadomosc: ");
-            String message;
-            message = scanner.nextLine();
-            send(nick + "|" + message);
+            gui.process(sender, msg, Target.ONLINELIST, Operation.APPEND);
+        }
+        else if (command.equalsIgnoreCase("Refresh") && msg.equalsIgnoreCase(nick))
+        {
+            gui.process(sender, msg, Target.ONLINELIST, Operation.CLEAR);
+        }
+        else if (command.equalsIgnoreCase("Refresh"))
+        {
+            Client.send("[" + nick + "]{Alive}(" + sender + ")");
+        }
+        else
+        {
+            gui.process(nick, msg, Target.CHAT, Operation.APPEND);
         }
     }
 }
