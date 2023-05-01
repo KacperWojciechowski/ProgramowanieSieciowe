@@ -117,6 +117,7 @@ public class MainFrame extends JFrame {
             if (sendButton.isEnabled())
             {
                 String msg = input.getText();
+                input.setText(null);
                 Client.send("[" + nick + "]" + "{Message}(" + msg + ")");
             }
             super.mouseClicked(e);

@@ -59,6 +59,7 @@ public class Popup extends JFrame {
                 if (sendButton.isEnabled())
                 {
                     nick = input.getText();
+                    input.setText(null);
                     sem.release();
                 }
                 super.mouseClicked(e);
