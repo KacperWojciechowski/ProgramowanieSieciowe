@@ -95,7 +95,7 @@ public class Main {
 
         Elements games = doc.select("tr[itemscope]");
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         for (Element game : games)
         {
             Elements tdChildren = game.children();
